@@ -1,0 +1,21 @@
+FROM node:18.12-alpine
+
+WORKDIR /app
+
+RUN apk update \
+  && apk --no-cache add git ca-certificates wget
+
+RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
+  && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk \
+  && apk --force-overwrite --no-cache add glibc-2.35-r0.apk
+
+
+COPY api/package.json .
+COPY api/yarn.lock .
+RUN yarn install
+
+COPY ./api .
+
+EXPOSE 9999
+
+CMD yarn start
