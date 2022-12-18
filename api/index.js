@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 
 app.get("/api/users", function (req, res) {
+  res.set({ "Access-Control-Allow-Origin": "http://localhost:3000" });
+
   res.json([
     {
       id: 1,
